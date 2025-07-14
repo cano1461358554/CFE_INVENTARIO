@@ -8,12 +8,18 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <!-- Estilos personalizados -->
     <style>
         :root {
-            --cfe-blue: #003366;
-            --cfe-light-blue: #0066cc;
-            --cfe-yellow: #ffcc00;
+            --cfe-primary: #003366;
+            --cfe-primary-light: #0066cc;
+            --cfe-secondary: #2D7DD2;
+            --cfe-accent: #FFCC00;
+            --cfe-light: #F5F5F5;
+            --cfe-dark: #333333;
         }
         
         body {
@@ -22,7 +28,7 @@
         }
         
         .navbar-cfe {
-            background-color: var(--cfe-blue);
+            background-color: var(--cfe-primary);
         }
         
         .navbar-cfe .navbar-brand {
@@ -35,22 +41,75 @@
         }
         
         .navbar-cfe .nav-link:hover {
-            color: var(--cfe-yellow);
+            color: var(--cfe-accent);
+        }
+        
+        .card-cfe {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .card-cfe:hover {
+            transform: translateY(-5px);
         }
         
         .card-header-cfe {
-            background-color: var(--cfe-light-blue);
+            background-color: var(--cfe-primary);
             color: white;
+            border-radius: 10px 10px 0 0 !important;
+        }
+        
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, var(--cfe-primary), var(--cfe-primary-light)) !important;
+        }
+        
+        .bg-gradient-success {
+            background: linear-gradient(135deg, #28a745, #218838) !important;
+        }
+        
+        .bg-gradient-info {
+            background: linear-gradient(135deg, #17a2b8, #138496) !important;
         }
         
         .btn-cfe {
-            background-color: var(--cfe-blue);
+            background-color: var(--cfe-primary);
             color: white;
         }
         
         .btn-cfe:hover {
-            background-color: var(--cfe-light-blue);
+            background-color: var(--cfe-primary-light);
             color: white;
+        }
+        
+        .list-group-item {
+            transition: background-color 0.3s;
+        }
+        
+        .list-group-item:hover {
+            background-color: rgba(0, 87, 63, 0.05);
+        }
+        
+        .alert {
+            border-left: 4px solid transparent;
+            border-radius: 0.375rem;
+        }
+        
+        .alert-primary {
+            border-left-color: var(--cfe-primary);
+        }
+        
+        .alert-success {
+            border-left-color: #28a745;
+        }
+        
+        .alert-info {
+            border-left-color: #17a2b8;
+        }
+        
+        .alert-danger {
+            border-left-color: #dc3545;
         }
     </style>
 </head>
@@ -89,35 +148,215 @@
         <div class="row">
             <div class="col-md-3">
                 <!-- Sidebar -->
-                <div class="card shadow-sm">
+                <div class="card card-cfe">
                     <div class="card-header card-header-cfe">
-                        Menú Principal
+                        <h5 class="mb-0"><i class="fas fa-bars mr-2"></i>Menú Principal</h5>
                     </div>
                     <div class="list-group list-group-flush">
-                        <a href="#" class="list-group-item list-group-item-action active">Dashboard</a>
-                        <a href="#" class="list-group-item list-group-item-action">Artículos</a>
-                        <a href="#" class="list-group-item list-group-item-action">Categorías</a>
-                        <a href="#" class="list-group-item list-group-item-action">Almacenes</a>
-                        <a href="#" class="list-group-item list-group-item-action">Proveedores</a>
+                        <a href="#" class="list-group-item list-group-item-action active">
+                            <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <i class="fas fa-boxes mr-2"></i>Artículos
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <i class="fas fa-tags mr-2"></i>Categorías
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <i class="fas fa-warehouse mr-2"></i>Almacenes
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <i class="fas fa-truck mr-2"></i>Proveedores
+                        </a>
                     </div>
                 </div>
             </div>
             
             <div class="col-md-9">
-                <!-- Contenido dinámico -->
-                <div class="card shadow-sm">
-                    <div class="card-header card-header-cfe d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">@yield('title', 'Dashboard')</h5>
-                        @yield('header-actions')
+                <!-- Notificaciones -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        @if (session('status'))
+                            <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-check-circle mr-3"></i>
+                                    <div>{{ session('status') }}</div>
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        @if (session('error'))
+                            <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-exclamation-circle mr-3"></i>
+                                    <div>{{ session('error') }}</div>
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        {{-- Mensaje personalizado según rol --}}
+                        @role('admin')
+                        <div class="alert alert-primary shadow-sm">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-user-shield mr-3 fa-lg"></i>
+                                <div>
+                                    <strong>Bienvenido administrador.</strong>
+                                    <div class="small mt-1">Tienes acceso completo al sistema.</div>
+                                </div>
+                            </div>
+                        </div>
+                        @elserole('encargado')
+                        <div class="alert alert-success shadow-sm">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-user-cog mr-3 fa-lg"></i>
+                                <div>
+                                    <strong>Bienvenido encargado.</strong>
+                                    <div class="small mt-1">Buen trabajo, gestiona los recursos eficientemente.</div>
+                                </div>
+                            </div>
+                        </div>
+                        @elserole('empleado')
+                        <div class="alert alert-info shadow-sm">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-user mr-3 fa-lg"></i>
+                                <div>
+                                    <strong>Bienvenido empleado.</strong>
+                                    <div class="small mt-1">Solo podrás ver tus recursos asignados.</div>
+                                </div>
+                            </div>
+                        </div>
+                        @endrole
                     </div>
+                </div>
+
+                <!-- Panel principal -->
+                <div class="card card-cfe mb-4">
+                    <div class="card-header card-header-cfe">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0 text-white">
+                                <i class="fas fa-bolt mr-2"></i>
+                                Sistema de Inventario CFE
+                            </h4>
+                        </div>
+                    </div>
+
                     <div class="card-body">
-                        @yield('content')
-                        
-                        <!-- Ejemplo de contenido -->
-                        <h1 class="display-4">Bienvenido al Sistema de Inventario CFE</h1>
-                        <p class="lead">Gestión completa de activos y materiales</p>
-                        <hr class="my-4">
-                        <p>Seleccione una opción del menú para comenzar.</p>
+                        <!-- Tarjetas de módulos -->
+                        <div class="row">
+                            <!-- Tarjeta de Movimientos -->
+                            <div class="col-md-4 mb-4">
+                                <div class="card card-cfe h-100">
+                                    <div class="card-header card-header-cfe bg-gradient-primary">
+                                        <h5 class="mb-0 text-white"><i class="fas fa-exchange-alt mr-2"></i>Movimientos</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item border-0 px-0 py-2">
+                                                <a href="prestamos" class="d-flex align-items-center text-decoration-none text-dark">
+                                                    <i class="fas fa-hand-holding mr-3 text-primary"></i>
+                                                    <span>Préstamos</span>
+                                                    <i class="fas fa-chevron-right ml-auto text-muted"></i>
+                                                </a>
+                                            </li>
+
+                                            @role('admin|encargado')
+                                            @if (!auth()->user()->hasRole('empleado'))
+                                                <li class="list-group-item border-0 px-0 py-2">
+                                                    <a href="ingresos" class="d-flex align-items-center text-decoration-none text-dark">
+                                                        <i class="fas fa-sign-in-alt mr-3 text-primary"></i>
+                                                        <span>Ingresos</span>
+                                                        <i class="fas fa-chevron-right ml-auto text-muted"></i>
+                                                    </a>
+                                                </li>
+                                            @endif
+                                            @endrole
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tarjeta de Materiales -->
+                            <div class="col-md-4 mb-4">
+                                <div class="card card-cfe h-100">
+                                    <div class="card-header card-header-cfe bg-gradient-success">
+                                        <h5 class="mb-0 text-white"><i class="fas fa-boxes mr-2"></i>Materiales</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        @role('admin|encargado')
+                                        <ul class="list-group list-group-flush">
+                                            @if (!auth()->user()->hasRole('empleado'))
+                                                <li class="list-group-item border-0 px-0 py-2">
+                                                    <a href="almacens" class="d-flex align-items-center text-decoration-none text-dark">
+                                                        <i class="fas fa-warehouse mr-3 text-success"></i>
+                                                        <span>Almacenes</span>
+                                                        <i class="fas fa-chevron-right ml-auto text-muted"></i>
+                                                    </a>
+                                                </li>
+                                            @endif
+                                        @endrole
+
+                                            <li class="list-group-item border-0 px-0 py-2">
+                                                <a href="materials" class="d-flex align-items-center text-decoration-none text-dark">
+                                                    <i class="fas fa-box-open mr-3 text-success"></i>
+                                                    <span>Materiales</span>
+                                                    <i class="fas fa-chevron-right ml-auto text-muted"></i>
+                                                </a>
+                                            </li>
+
+                                            @role('admin|encargado')
+                                            @if (!auth()->user()->hasRole('empleado'))
+                                                <li class="list-group-item border-0 px-0 py-2">
+                                                    <a href="stocks" class="d-flex align-items-center text-decoration-none text-dark">
+                                                        <i class="fas fa-clipboard-list mr-3 text-success"></i>
+                                                        <span>Stocks</span>
+                                                        <i class="fas fa-chevron-right ml-auto text-muted"></i>
+                                                    </a>
+                                                </li>
+                                            @endif
+                                            @endrole
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @role('admin|encargado')
+                            @if (!auth()->user()->hasRole('empleado'))
+                                <div class="col-md-4 mb-4">
+                                    <div class="card card-cfe h-100">
+                                        <div class="card-header card-header-cfe bg-gradient-info">
+                                            <h5 class="mb-0 text-white"><i class="fas fa-tags mr-2"></i>Administración</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item border-0 px-0 py-2">
+                                                    <a href="users" class="d-flex align-items-center text-decoration-none text-dark">
+                                                        <i class="fas fa-users mr-3 text-info"></i>
+                                                        <span>Usuarios</span>
+                                                        <i class="fas fa-chevron-right ml-auto text-muted"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                            @endrole
+                        </div>
+
+                        <!-- Información adicional -->
+                        <div class="row mt-4 pt-3 border-top">
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center p-3 bg-light rounded">
+                                    <i class="fas fa-question-circle fa-2x text-primary mr-3"></i>
+                                    <div>
+                                        <h6 class="mb-1">¿Necesitas ayuda?</h6>
+                                        <p class="small text-muted mb-0">Consulta el manual de usuario o contacta al administrador.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -160,7 +399,6 @@
     
     <!-- Scripts personalizados -->
     <script>
-        // Aquí puedes agregar tu lógica JavaScript
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Sistema CFE INVENTARIO cargado');
             
